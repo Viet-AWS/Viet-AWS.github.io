@@ -1,0 +1,1362 @@
+<!DOCTYPE html>
+<html lang="en" class="js csstransforms3d">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Hugo 0.92.2" />
+    <meta name="description" content="">
+<meta name="author" content="Thach Nguyen">
+
+    <link rel="icon" href="/images/favicon.png" type="image/png">
+
+    <title>Create Users, User Groups and Attach Policies :: Giới thiệu về Amazon EC2</title>
+
+    
+    <link href="/css/nucleus.css?1673808581" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1673808581" rel="stylesheet">
+    <link href="/css/hybrid.css?1673808581" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1673808581" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1673808581" rel="stylesheet">
+    <link href="/css/auto-complete.css?1673808581" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1673808581" rel="stylesheet">
+    <link href="/css/theme.css?1673808581" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1673808581" rel="stylesheet">
+    
+    <link href="/css/theme-workshop.css?1673808581" rel="stylesheet">
+    
+    
+
+    <script src="/js/jquery-3.3.1.min.js?1673808581"></script>
+
+    <style>
+      :root #header + #content > #left > #rlblock_left{
+          display:none !important;
+      }
+      
+    </style>
+    
+  </head>
+  <body class="" data-url="/1-category/1.1-securityidentitycompliance/1.1.1-createusergroupandattachpolicies/">
+    <nav id="sidebar" class="showVisitedLinks">
+
+
+
+  <div id="header-wrapper">
+    <div id="header">
+      <a id="logo" href="/">
+
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30" width="30%"><defs><style>.cls-1{fill:#fff;}.cls-2{fill:#f90;fill-rule:evenodd;}</style></defs><title>AWS-Logo_White-Color</title><path class="cls-1" d="M14.09,10.85a4.7,4.7,0,0,0,.19,1.48,7.73,7.73,0,0,0,.54,1.19.77.77,0,0,1,.12.38.64.64,0,0,1-.32.49l-1,.7a.83.83,0,0,1-.44.15.69.69,0,0,1-.49-.23,3.8,3.8,0,0,1-.6-.77q-.25-.42-.51-1a6.14,6.14,0,0,1-4.89,2.3,4.54,4.54,0,0,1-3.32-1.19,4.27,4.27,0,0,1-1.22-3.2A4.28,4.28,0,0,1,3.61,7.75,6.06,6.06,0,0,1,7.69,6.46a12.47,12.47,0,0,1,1.76.13q.92.13,1.91.36V5.73a3.65,3.65,0,0,0-.79-2.66A3.81,3.81,0,0,0,7.86,2.3a7.71,7.71,0,0,0-1.79.22,12.78,12.78,0,0,0-1.79.57,4.55,4.55,0,0,1-.58.22l-.26,0q-.35,0-.35-.52V2a1.09,1.09,0,0,1,.12-.58,1.2,1.2,0,0,1,.47-.35A10.88,10.88,0,0,1,5.77.32,10.19,10.19,0,0,1,8.36,0a6,6,0,0,1,4.35,1.35,5.49,5.49,0,0,1,1.38,4.09ZM7.34,13.38a5.36,5.36,0,0,0,1.72-.31A3.63,3.63,0,0,0,10.63,12,2.62,2.62,0,0,0,11.19,11a5.63,5.63,0,0,0,.16-1.44v-.7a14.35,14.35,0,0,0-1.53-.28,12.37,12.37,0,0,0-1.56-.1,3.84,3.84,0,0,0-2.47.67A2.34,2.34,0,0,0,5,11a2.35,2.35,0,0,0,.61,1.76A2.4,2.4,0,0,0,7.34,13.38Zm13.35,1.8a1,1,0,0,1-.64-.16,1.3,1.3,0,0,1-.35-.65L15.81,1.51a3,3,0,0,1-.15-.67.36.36,0,0,1,.41-.41H17.7a1,1,0,0,1,.65.16,1.4,1.4,0,0,1,.33.65l2.79,11,2.59-11A1.17,1.17,0,0,1,24.39.6a1.1,1.1,0,0,1,.67-.16H26.4a1.1,1.1,0,0,1,.67.16,1.17,1.17,0,0,1,.32.65L30,12.39,32.88,1.25A1.39,1.39,0,0,1,33.22.6a1,1,0,0,1,.65-.16h1.54a.36.36,0,0,1,.41.41,1.36,1.36,0,0,1,0,.26,3.64,3.64,0,0,1-.12.41l-4,12.86a1.3,1.3,0,0,1-.35.65,1,1,0,0,1-.64.16H29.25a1,1,0,0,1-.67-.17,1.26,1.26,0,0,1-.32-.67L25.67,3.64,23.11,14.34a1.26,1.26,0,0,1-.32.67,1,1,0,0,1-.67.17Zm21.36.44a11.28,11.28,0,0,1-2.56-.29,7.44,7.44,0,0,1-1.92-.67,1,1,0,0,1-.61-.93v-.84q0-.52.38-.52a.9.9,0,0,1,.31.06l.42.17a8.77,8.77,0,0,0,1.83.58,9.78,9.78,0,0,0,2,.2,4.48,4.48,0,0,0,2.43-.55,1.76,1.76,0,0,0,.86-1.57,1.61,1.61,0,0,0-.45-1.16A4.29,4.29,0,0,0,43,9.22l-2.41-.76A5.15,5.15,0,0,1,38,6.78a3.94,3.94,0,0,1-.83-2.41,3.7,3.7,0,0,1,.45-1.85,4.47,4.47,0,0,1,1.19-1.37A5.27,5.27,0,0,1,40.51.29,7.4,7.4,0,0,1,42.6,0a8.87,8.87,0,0,1,1.12.07q.57.07,1.08.19t.95.26a4.27,4.27,0,0,1,.7.29,1.59,1.59,0,0,1,.49.41.94.94,0,0,1,.15.55v.79q0,.52-.38.52a1.76,1.76,0,0,1-.64-.2,7.74,7.74,0,0,0-3.2-.64,4.37,4.37,0,0,0-2.21.47,1.6,1.6,0,0,0-.79,1.48,1.58,1.58,0,0,0,.49,1.18,4.94,4.94,0,0,0,1.83.92L44.55,7a5.08,5.08,0,0,1,2.57,1.6A3.76,3.76,0,0,1,47.9,11a4.21,4.21,0,0,1-.44,1.93,4.4,4.4,0,0,1-1.21,1.47,5.43,5.43,0,0,1-1.85.93A8.25,8.25,0,0,1,42.05,15.62Z"></path><path class="cls-2" d="M45.19,23.81C39.72,27.85,31.78,30,25,30A36.64,36.64,0,0,1,.22,20.57c-.51-.46-.06-1.09.56-.74A49.78,49.78,0,0,0,25.53,26.4,49.23,49.23,0,0,0,44.4,22.53C45.32,22.14,46.1,23.14,45.19,23.81Z"></path><path class="cls-2" d="M47.47,21.21c-.7-.9-4.63-.42-6.39-.21-.53.06-.62-.4-.14-.74,3.13-2.2,8.27-1.57,8.86-.83s-.16,5.89-3.09,8.35c-.45.38-.88.18-.68-.32C46.69,25.8,48.17,22.11,47.47,21.21Z"></path></svg>
+
+</a>
+
+    </div>
+    
+        <div class="searchbox">
+    <label for="search-by"><i class="fas fa-search"></i></label>
+    <input data-search-input id="search-by" type="search" placeholder="Search...">
+    <span data-search-clear=""><i class="fas fa-times"></i></span>
+</div>
+
+<script type="text/javascript" src="/js/lunr.min.js?1673808581"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1673808581"></script>
+<script type="text/javascript">
+    
+        var baseurl = "";
+    
+</script>
+<script type="text/javascript" src="/js/search.js?1673808581"></script>
+
+    
+  </div>
+
+    <div class="highlightable">
+    <ul class="topics">
+
+        
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-category/" title="Filter by Category" class="dd-item 
+        parent
+        
+        
+        ">
+      <a href="/1-category/">
+           <b> 1. </b> Filter by Category
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+          
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-category/1.1-securityidentitycompliance/" title="Security, Identity &amp; Compliance" class="dd-item 
+        parent
+        
+        
+        ">
+      <a href="/1-category/1.1-securityidentitycompliance/">
+           <b> 1.1 </b> Security, Identity &amp; Compliance
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+          
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-category/1.1-securityidentitycompliance/1.1.1-createusergroupandattachpolicies/" title="Create Users, User Groups and Attach Policies" class="dd-item 
+        parent
+        active
+        
+        ">
+      <a href="/1-category/1.1-securityidentitycompliance/1.1.1-createusergroupandattachpolicies/">
+           <b> 1.1.1 </b> Create Users, User Groups and Attach Policies
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+              
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/2-level/" title="Filter by Level" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/2-level/">
+           <b> 2. </b> Filter by Level
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+          
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/2-level/2.1-level-0/" title="Level 0" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/2-level/2.1-level-0/">
+           <b> 2.1 </b> Level 0
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+          
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/2-level/2.1-level-0/2.1.1-createusergroupandattachpolicies/" title="Create Users, User Groups and Attach Policies" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/2-level/2.1-level-0/2.1.1-createusergroupandattachpolicies/">
+           <b> 2.1.1 </b> Create Users, User Groups and Attach Policies
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+              
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-contenttype/" title="Filter by Content Type" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-contenttype/">
+           <b> 3. </b> Filter by Content Type
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+          
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-contenttype/3.1-gettingstartedguides/" title="Getting Started Guides" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-contenttype/3.1-gettingstartedguides/">
+           <b> 3.1 </b> Getting Started Guides
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+          
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-contenttype/3.1-gettingstartedguides/3.1.1-createusergroupandattachpolicies/" title="Create Users, User Groups and Attach Policies" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-contenttype/3.1-gettingstartedguides/3.1.1-createusergroupandattachpolicies/">
+           <b> 3.1.1 </b> Create Users, User Groups and Attach Policies
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+              
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+              
+    </li>
+  
+ 
+
+          
+         
+    </ul>
+
+    
+    
+      <section id="shortcuts">
+        <h3>Author</h3>
+        <ul>
+          
+              <li> 
+                  <a class="padding" href=""><a class='padding' href='https://www.linkedin.com/in/thachnv92/'><i class='fab fa-linkedin-in'></i><b style='color:royalblue'> &nbsp; Thach Nguyen Van</b></a><a class='padding' href='https://www.facebook.com/dejokuondi'><i class='fab fa-facebook'></i><b style='color:royalblue'> &nbsp; Thach Nguyen</b></a><a class='padding' href='https://www.youtube.com/@Viet-AWS'><i class='fab fa-youtube'></i><b style='color:red'> &nbsp; VietAWS</b></a></a>
+              </li>
+          
+        </ul>
+      </section>
+    
+
+    
+    <section id="prefooter">
+      <hr/>
+      <ul>
+      
+        <li>
+          <a class="padding">
+            <i class="fas fa-language fa-fw"></i>
+          <div class="select-style">
+            <select id="select-language" onchange="location = this.value;">
+          
+          
+          
+              
+              
+                  
+                    
+                    
+                      <option id="en" value="/1-category/1.1-securityidentitycompliance/1.1.1-createusergroupandattachpolicies/" selected>English</option>
+                    
+                  
+              
+                  
+              
+          
+              
+              
+                  
+              
+                  
+                    
+                    
+                      <option id="vi" value="/vi/1-category/1.1-securityidentitycompliance/1.1.1-createusergroupandattachpolicies/">Tiếng Việt</option>
+                    
+                  
+              
+          
+        </select>
+        <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+          width="255px" height="255px" viewBox="0 0 255 255" style="enable-background:new 0 0 255 255;" xml:space="preserve">
+          <g>
+            <g id="arrow-drop-down">
+              <polygon points="0,63.75 127.5,191.25 255,63.75 		" />
+            </g>
+          </g>
+        </svg>
+        </div>
+        </a>
+        </li>
+      
+      
+      
+        <li><a class="padding" href="#" data-clear-history-toggle=""><i class="fas fa-history fa-fw"></i> Clear History</a></li>
+      
+      </ul>
+    </section>
+    
+    <section id="footer">
+      <left>
+    
+     <b><font size=3>  Filter by  </font></b> <br>
+     <i><a href="https://viet-aws.github.io/1-category/" style="color:orange">Category</a></i> <br>
+     <i><a href="https://viet-aws.github.io/2-level/" style="color:orange">Cloud Level</a></i> <br>
+     <i><a href="https://viet-aws.github.io/3-contenttype/" style="color:orange">Content Type</a></i> <br>
+</left>
+
+<left>
+    <br>
+    <b><font size=3>  Last Updated  </font></b> <br>
+    <i><font color=orange>16-Jan-2023</font></i>
+</left>
+
+<left>
+    <br>
+    <br>
+    <b><font size=3>  Author  </font></b> <br>
+    <i>
+    <a href="https://www.linkedin.com/in/thachnv92/" style="color:orange">Thach Ngyyen </a> <br>
+    </i>
+</left>
+
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+    </section>
+  </div>
+</nav>
+
+
+
+
+        <section id="body">
+        <div id="overlay"></div>
+        <div class="padding highlightable">
+              
+              <div>
+                <div id="top-bar">
+                
+                
+                <div id="breadcrumbs" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+                    <span id="sidebar-toggle-span">
+                        <a href="#" id="sidebar-toggle" data-sidebar-toggle="">
+                          <i class="fas fa-bars"></i>
+                        </a>
+                    </span>
+                  
+                  <span id="toc-menu"><i class="fas fa-list-alt"></i></span>
+                  
+                  <span class="links">
+                 
+                 
+                    
+          
+          
+            
+            
+          
+          
+            
+            
+          
+          
+            
+            
+          
+          
+            <a href='/'>[Viet-AWS] AWS Hands-on tutorials for Vietnamese</a> > <a href='/1-category/'>Filter by Category</a> > <a href='/1-category/1.1-securityidentitycompliance/'>Security, Identity & Compliance</a> > Create Users, User Groups and Attach Policies
+          
+        
+          
+        
+          
+        
+          
+        
+                 
+                  </span>
+                </div>
+                
+                    <div class="progress">
+    <div class="wrapper">
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#topics-covered">Topics covered</a></li>
+    <li><a href="#accessing-the-aws-management-console">Accessing the AWS Management Console</a></li>
+    <li><a href="#task-1-create-users-and-groups">Task 1: Create Users and Groups</a></li>
+    <li><a href="#business-scenario">Business Scenario</a></li>
+    <li><a href="#task-2-add-users-to-groups">Task 2: Add Users to Groups</a>
+      <ul>
+        <li><a href="#add-user-1-to-the-s3-support-group">Add user-1 to the S3-Support Group</a></li>
+        <li><a href="#add-user-2-to-the-ec2-support-group">Add user-2 to the EC2-Support Group</a></li>
+        <li><a href="#add-user-3-to-the-ec2-admin-group">Add user-3 to the EC2-Admin Group</a></li>
+      </ul>
+    </li>
+    <li><a href="#task-3-create-an-ec2-instance">Task 3: Create an EC2 Instance</a></li>
+    <li><a href="#task-4-create-a-s3-bucket">Task 4: Create a S3 bucket</a></li>
+    <li><a href="#task-5-sign-in-and-test-users">Task 5: Sign-In and Test Users</a></li>
+    <li><a href="#lab-complete-i-classfas-fa-graduation-capi">Lab complete <!-- raw HTML omitted --><!-- raw HTML omitted --></a></li>
+    <li><a href="#summary">Summary</a></li>
+  </ul>
+</nav>
+    </div>
+</div>
+
+                
+              </div>
+            </div>
+            
+        <div id="head-tags">
+        
+        </div>
+        
+        <div id="body-inner">
+          
+            <h1>
+              
+              Create Users, User Groups and Attach Policies
+            </h1>
+          
+
+        
+
+
+
+	<p><strong>AWS Identity and Access Management (IAM)</strong> is a web service that enables Amazon Web Services (AWS) customers to manage users and user permissions in AWS. With IAM, you can centrally manage <strong>users</strong>, <strong>security credentials</strong> such as access keys, and <strong>permissions</strong> that control which AWS resources users can access.</p>
+<h2 id="topics-covered">Topics covered</h2>
+<p>This lab will demonstrate:</p>
+<p><img src="/images/000001/lab-scenario.png" alt="Lab Scenario"></p>
+<ul>
+<li>Exploring <strong>IAM Users and Groups</strong></li>
+<li>Inspecting <strong>IAM policies</strong> and attach to the created groups</li>
+<li>Following a <strong>real-world scenario</strong>, adding users to groups with specific capabilities enabled</li>
+<li>Locating and using the <strong>IAM sign-in URL</strong></li>
+<li><strong>Experimenting</strong> with the effects of policies on service access</li>
+</ul>
+<p> 
+<strong>AWS Identity and Access Management</strong></p>
+<p>AWS Identity and Access Management (IAM) can be used to:</p>
+<ul>
+<li>
+<p><strong>Manage IAM Users and their access:</strong> You can create Users and assign them individual security credentials (access keys, passwords, and multi-factor authentication devices). You can manage permissions to control which operations a User can perform.</p>
+</li>
+<li>
+<p><strong>Manage IAM Roles and their permissions:</strong> An IAM Role is similar to a User, in that it is an AWS identity with permission policies that determine what the identity can and cannot do in AWS. However, instead of being uniquely associated with one person, a Role is intended to be <em>assumable</em> by anyone who needs it.</p>
+</li>
+<li>
+<p><strong>Manage federated users and their permissions:</strong> You can enable <em>identity federation</em> to allow existing users in your enterprise to access the AWS Management Console, to call AWS APIs and to access resources, without the need to create an IAM User for each identity.</p>
+</li>
+</ul>
+<p><strong>Duration</strong></p>
+<p>This lab takes approximately <strong>30 minutes</strong> to complete.</p>
+<p> 
+ </p>
+<h2 id="accessing-the-aws-management-console">Accessing the AWS Management Console</h2>
+<ol>
+<li>
+<p>Access to <a href="https://console.aws.amazon.com">https://console.aws.amazon.com</a>.</p>
+</li>
+<li>
+<p>Sign in by <strong>Root user</strong> or <strong>IAM User</strong>.</p>
+</li>
+</ol>
+<p><img src="/images/000001/step-01.png?featherlight=false&amp;width=90pc" alt="Log in"></p>
+<p> 
+ </p>
+<h2 id="task-1-create-users-and-groups">Task 1: Create Users and Groups</h2>
+<p>In this task, you need to create Users and Groups in IAM.</p>
+<ol start="3">
+<li>
+<p>In the <strong>AWS Management Console</strong>, on the <strong>Services</strong> menu, select <strong>IAM</strong>.</p>
+</li>
+<li>
+<p>In the navigation panel on the left, choose <strong>Users</strong> and <strong>Add users</strong>.</p>
+<p>We need to create 3 IAM users:</p>
+<ul>
+<li>
+<p>user-1</p>
+</li>
+<li>
+<p>user-2</p>
+</li>
+<li>
+<p>user-3</p>
+</li>
+</ul>
+</li>
+</ol>
+<p><img src="/images/000001/step-02.png?featherlight=false&amp;width=90pc" alt="Users"></p>
+<ol start="5">
+<li>
+<p>Add 3 users, select checkbox <strong>Password - AWS Management Console access</strong> and uncheck checkbox <strong>Users must create a new password at next sign-in</strong> as below picture.</p>
+<p>Select  <strong>Next: Permissions</strong>.</p>
+</li>
+</ol>
+<p><img src="/images/000001/step-03.png?featherlight=false&amp;width=90pc" alt="Add Users"></p>
+<ol start="6">
+<li>Select  <strong>Next: Tags</strong>.</li>
+</ol>
+<p><img src="/images/000001/step-04.png?featherlight=false&amp;width=90pc" alt="Add Users"></p>
+<ol start="7">
+<li>Select  <strong>Next: Review</strong>.</li>
+</ol>
+<p><img src="/images/000001/step-05.png?featherlight=false&amp;width=90pc" alt="Add Users"></p>
+<ol start="8">
+<li>Select  <strong>Create users</strong>.</li>
+</ol>
+<p><img src="/images/000001/step-06.png?featherlight=false&amp;width=90pc" alt="Create Users"></p>
+<ol start="9">
+<li><strong>Download .csv</strong> for save. Then <strong>Close</strong>.</li>
+</ol>
+<p><img src="/images/000001/step-07.png?featherlight=false&amp;width=90pc" alt="Create Users"></p>
+<ol start="10">
+<li>
+<p>Choose <strong>user-1</strong>.</p>
+<p>This will bring to a summary page for user-1. The <strong>Permissions</strong> tab will be displayed.</p>
+</li>
+<li>
+<p>Notice that user-1 does not have any permissions.</p>
+</li>
+<li>
+<p>Choose the <strong>Groups</strong> tab.</p>
+<p>user-1 also is not a member of any groups.</p>
+</li>
+<li>
+<p>Choose the <strong>Security credentials</strong> tab.</p>
+<p>user-1 is assigned a <strong>Console password</strong></p>
+</li>
+<li>
+<p>In the navigation pane on the left, choose <strong>User groups</strong> and <strong>Create group</strong>.</p>
+<p>We need to create 3 IAM Groups:</p>
+<ul>
+<li>
+<p>EC2-Admin</p>
+</li>
+<li>
+<p>EC2-Support</p>
+</li>
+<li>
+<p>S3-Support</p>
+</li>
+</ul>
+</li>
+</ol>
+<p><img src="/images/000001/step-08.png?featherlight=false&amp;width=90pc" alt="User groups"></p>
+<ol start="15">
+<li>Enter <strong>S3-Support</strong> to textbox <em>User group name</em>.</li>
+</ol>
+<p><img src="/images/000001/step-09.png?featherlight=false&amp;width=90pc" alt="Create user group"></p>
+<ol start="16">
+<li>
+<p>Scroll down and enter <strong>S3</strong> to textbox <em>Filter policies</em> and <strong>Enter</strong> to search.</p>
+<p>Check to <em>AmazonS3ReadOnlyAccess</em> and select <strong>Create group</strong>.</p>
+<p>This group has a <strong>Managed Policy</strong> associated with it, called <strong>AmazonEC2ReadOnlyAccess</strong>. Managed Policies are pre-built policies (built either by AWS or by your administrators) that can be attached to IAM Users and Groups. When the policy is updated, the changes to the policy are immediately apply against all Users and Groups that are attached to the policy.</p>
+</li>
+</ol>
+<p><img src="/images/000001/step-10.png?featherlight=false&amp;width=90pc" alt="Create user group"></p>
+<ol start="17">
+<li>Using similar steps to the ones above, create <strong>EC2-Admin</strong> with <strong>AmazonEC2FullAccess</strong>.</li>
+</ol>
+<p><img src="/images/000001/step-11.png?featherlight=false&amp;width=90pc" alt="Create user group"></p>
+<ol start="18">
+<li>And <strong>EC2-Support</strong> with <strong>AmazonEC2ReadOnlyAccess</strong>.</li>
+</ol>
+<p><img src="/images/000001/step-12.png?featherlight=false&amp;width=90pc" alt="Create user group"></p>
+<ol start="19">
+<li>
+<p>When filter policies, can choose the plus (<strong>+</strong>) icon next to the AmazonEC2ReadOnlyAccess policy to view the policy details.</p>
+<p><strong>Note</strong>: A policy defines what actions are allowed or denied for specific AWS resources.</p>
+<p>This policy is granting permission to List and Describe information about EC2, Elastic Load Balancing, CloudWatch and Auto Scaling. This ability to view resources, but not modify them, is ideal for assigning to a Support role.</p>
+<p>The basic structure of the statements in an IAM Policy is:</p>
+<ul>
+<li>
+<p><strong>Effect</strong> says whether to <em>Allow</em> or <em>Deny</em> the permissions.</p>
+</li>
+<li>
+<p><strong>Action</strong> specifies the API calls that can be made against an AWS Service (eg <em>cloudwatch:ListMetrics</em>).</p>
+</li>
+<li>
+<p><strong>Resource</strong> defines the scope of entities covered by the policy rule (eg a specific Amazon S3 bucket or Amazon EC2 instance, or * which means <em>any resource</em>).</p>
+</li>
+</ul>
+<p>Choose the minus icon (<strong>-</strong>) to hide the policy details.</p>
+</li>
+</ol>
+<p><img src="/images/000001/step-13.png?featherlight=false&amp;width=90pc" alt="User group"></p>
+<ol start="20">
+<li>In the navigation pane on the left, choose <strong>User groups</strong> to view list of user groups.</li>
+</ol>
+<p><img src="/images/000001/step-14.png?featherlight=false&amp;width=90pc" alt="User group"></p>
+<p> 
+ </p>
+<h2 id="business-scenario">Business Scenario</h2>
+<p>For the remainder of this lab, you will work with these Users and Groups to enable permissions supporting the following business scenario:</p>
+<p>Your company is growing its use of Amazon Web Services, and is using many Amazon EC2 instances and a great deal of Amazon S3 storage. You wish to give access to new staff depending upon their job function:</p>
+<table>
+<thead>
+<tr>
+<th>User</th>
+<th>In Group</th>
+<th>Permissions</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>user-1</td>
+<td>S3-Support</td>
+<td>Read-Only access to Amazon S3</td>
+</tr>
+<tr>
+<td>user-2</td>
+<td>EC2-Support</td>
+<td>Read-Only access to Amazon EC2</td>
+</tr>
+<tr>
+<td>user-3</td>
+<td>EC2-Admin</td>
+<td>Full Access to Amazon EC2</td>
+</tr>
+</tbody>
+</table>
+<p> 
+ </p>
+<h2 id="task-2-add-users-to-groups">Task 2: Add Users to Groups</h2>
+<p>You have recently hired <strong>user-1</strong> into a role where they will provide support for Amazon S3. You will add them to the <strong>S3-Support</strong> group so that they inherit the necessary permissions via the attached <em>AmazonS3ReadOnlyAccess</em> policy.</p>
+<p> 
+ </p>
+<h3 id="add-user-1-to-the-s3-support-group">Add user-1 to the S3-Support Group</h3>
+<ol start="21">
+<li>
+<p>In the left navigation pane, choose <strong>User groups</strong>.</p>
+</li>
+<li>
+<p>Choose the <strong>S3-Support</strong> group.</p>
+</li>
+<li>
+<p>Choose the <strong>Users</strong> tab.</p>
+</li>
+<li>
+<p>In the <strong>Users</strong> tab, choose <strong>Add users</strong>.</p>
+</li>
+</ol>
+<p><img src="/images/000001/step-15.png?featherlight=false&amp;width=90pc" alt="User group"></p>
+<ol start="25">
+<li>
+<p>In the <strong>Add Users to S3-Support</strong> window, configure the following:</p>
+<p>Select <strong>user-1</strong>.</p>
+<p>At the bottom of the screen, choose <strong>Add Users</strong>.</p>
+<p>In the <strong>Users</strong> tab you will see that user-1 has been added to the group.</p>
+</li>
+</ol>
+<p><img src="/images/000001/step-16.png?featherlight=false&amp;width=90pc" alt="User group"></p>
+<p><img src="/images/000001/step-17.png?featherlight=false&amp;width=90pc" alt="User group"></p>
+<p> 
+ </p>
+<h3 id="add-user-2-to-the-ec2-support-group">Add user-2 to the EC2-Support Group</h3>
+<p>You have hired <strong>user-2</strong> into a role where they will provide support for Amazon EC2.</p>
+<ol start="26">
+<li>
+<p>Using similar steps to the ones above, add <strong>user-2</strong> to the <strong>EC2-Support</strong> group.</p>
+<p>user-2 should now be part of the <strong>EC2-Support</strong> group.</p>
+</li>
+</ol>
+<p> 
+ </p>
+<h3 id="add-user-3-to-the-ec2-admin-group">Add user-3 to the EC2-Admin Group</h3>
+<p>You have hired <strong>user-3</strong> as your Amazon EC2 administrator, who manage your EC2 instances.</p>
+<ol start="27">
+<li>
+<p>Using similar steps to the ones above, add <strong>user-3</strong> to the <strong>EC2-Admin</strong> group.</p>
+<p>user-3 should now be part of the <strong>EC2-Admin</strong> group.</p>
+</li>
+<li>
+<p>In the navigation pane on the left, choose <strong>User groups</strong>.</p>
+<p>Each Group should now have a <strong>1</strong> in the Users column for the number of Users in each Group.</p>
+<p>If you do not have a <strong>1</strong> beside each group, revisit the above instructions above to ensure that each user is assigned to a User group, as shown in the table in the Business Scenario section.</p>
+</li>
+</ol>
+<p> 
+ </p>
+<h2 id="task-3-create-an-ec2-instance">Task 3: Create an EC2 Instance</h2>
+<p>In this task, you need to create an EC2 instance to test permission of IAM User.</p>
+<ol start="29">
+<li>
+<p>In the <strong>AWS Management Console</strong>, on the <strong>Services</strong> menu, select <strong>EC2</strong>.</p>
+</li>
+<li>
+<p>In the page, on the <strong>Launch instance</strong> panel, select <strong>Launch instance</strong> and <strong>Launch instance</strong>.</p>
+</li>
+</ol>
+<p><img src="/images/000001/step-18.png?featherlight=false&amp;width=90pc" alt="User group"></p>
+<ol start="31">
+<li>
+<p>In this task, we only create an EC2 instance with minimum customize.</p>
+<p>We need to focus only 2 field:</p>
+<ul>
+<li>
+<p>Tag Name</p>
+</li>
+<li>
+<p>Process without keypair</p>
+</li>
+</ul>
+<p>Then select <strong>Launch instance</strong>.</p>
+</li>
+</ol>
+<p><img src="/images/000001/step-19.png?featherlight=false&amp;width=90pc" alt="User group"></p>
+<p><img src="/images/000001/step-20.png?featherlight=false&amp;width=90pc" alt="User group"></p>
+<p><img src="/images/000001/step-21.png?featherlight=false&amp;width=90pc" alt="User group"></p>
+<p> 
+ </p>
+<h2 id="task-4-create-a-s3-bucket">Task 4: Create a S3 bucket</h2>
+<p>In this task, you need to create a S3 bucket to test permission of IAM User.</p>
+<ol start="32">
+<li>
+<p>In the <strong>AWS Management Console</strong>, on the <strong>Services</strong> menu, select <strong>S3</strong>.</p>
+</li>
+<li>
+<p>In the page, on the <strong>Create a bucket</strong> panel, select <strong>Create bucket</strong>.</p>
+</li>
+</ol>
+<p><img src="/images/000001/create-s3-bucket-01.png?featherlight=false&amp;width=90pc" alt="S3 create bucket"></p>
+<ol start="34">
+<li>
+<p>In this task, we only create a S3 bucket with minimum customize.</p>
+<p>We need to focus only 1 field:</p>
+<ul>
+<li>Name of bucket</li>
+</ul>
+<p>Then scroll down and select <strong>Create bucket</strong>.</p>
+</li>
+</ol>
+<p><img src="/images/000001/create-s3-bucket-02.png?featherlight=false&amp;width=90pc" alt="S3 create bucket"></p>
+<p><img src="/images/000001/create-s3-bucket-03.png?featherlight=false&amp;width=90pc" alt="S3 create bucket"></p>
+<p> 
+ </p>
+<h2 id="task-5-sign-in-and-test-users">Task 5: Sign-In and Test Users</h2>
+<p>In this task, you will test the permissions of each IAM User.</p>
+<ol start="35">
+<li>
+<p>In the <strong>AWS Management Console</strong>, on the <strong>Services</strong> menu, select <strong>IAM</strong>.</p>
+</li>
+<li>
+<p>In the navigation pane on the left, choose <strong>Dashboard</strong>.</p>
+<p>An <strong>IAM users sign-in link</strong> is displayed on the right. It will look similar to: <a href="https://123456789012.signin.aws.amazon.com/console">https://123456789012.signin.aws.amazon.com/console</a></p>
+<p>This link can be used to sign-in to the AWS Account you are currently using.</p>
+</li>
+</ol>
+<p><img src="/images/000001/step-22.png?featherlight=false&amp;width=90pc" alt="Sign in"></p>
+<ol start="37">
+<li>
+<p>Copy the <strong>Sign-in URL for IAM users in this account</strong>.</p>
+</li>
+<li>
+<p>Open a private (Incognito) window.</p>
+<p><strong>Mozilla Firefox</strong></p>
+<ul>
+<li>Choose the menu bars <!-- raw HTML omitted --><!-- raw HTML omitted --> at the top-right of the screen</li>
+<li>Select <strong>New private window</strong></li>
+</ul>
+<p><strong>Google Chrome</strong></p>
+<ul>
+<li>Choose the ellipsis <!-- raw HTML omitted --><!-- raw HTML omitted --> at the top-right of the screen</li>
+<li>Select <strong>New Incognito Window</strong></li>
+</ul>
+<p><strong>Microsoft Edge</strong></p>
+<ul>
+<li>Choose the ellipsis <!-- raw HTML omitted --><!-- raw HTML omitted --> at the top-right of the screen</li>
+<li>Choose <strong>New InPrivate window</strong></li>
+</ul>
+<p><strong>Microsoft Internet Explorer</strong></p>
+<ul>
+<li>Choose the <strong>Tools</strong> menu option</li>
+<li>Choose <strong>InPrivate Browsing</strong></li>
+</ul>
+</li>
+<li>
+<p>Paste the <strong>Sign-in URL for IAM users in this account</strong> link into the address bar of your private browser session and press <strong>Enter</strong>.</p>
+<p>Next, you will sign-in as <strong>user-1</strong>, who has been hired as your Amazon S3 storage support staff.</p>
+</li>
+<li>
+<p>Sign-in with:</p>
+<ul>
+<li>
+<p><strong>IAM user name:</strong> <code>user-1</code></p>
+</li>
+<li>
+<p><strong>Password:</strong> Open file credential.csv which downloaded.</p>
+</li>
+</ul>
+</li>
+<li>
+<p>In the <strong>Services</strong> menu, choose <strong>S3</strong>.</p>
+</li>
+<li>
+<p>Choose the name of the bucket that exists in the account and browse the contents.</p>
+<p>Since your user is part of the <strong>S3-Support</strong> Group in IAM, they have permission to view a list of Amazon S3 buckets and the contents.</p>
+<p>Note: The bucket does not contain any objects.</p>
+<p>Now, test whether they have access to Amazon EC2.</p>
+</li>
+</ol>
+<p><img src="/images/000001/step-23.png?featherlight=false&amp;width=90pc" alt="user-1"></p>
+<ol start="43">
+<li>
+<p>In the <strong>Services</strong> menu, choose <strong>EC2</strong>.</p>
+</li>
+<li>
+<p>In the left navigation pane, choose <strong>Instances</strong>.</p>
+<p>You cannot see any instances. Instead, you see a message that states <em>You are not authorized to perform this operation</em>. This is because this user has not been granted any permissions to access Amazon EC2.</p>
+<p>You will now sign-in as <strong>user-2</strong>, who has been hired as your Amazon EC2 support person.</p>
+</li>
+</ol>
+<p><img src="/images/000001/step-24.png?featherlight=false&amp;width=90pc" alt="user-1"></p>
+<ol start="45">
+<li>
+<p>Sign user-1 out of the <strong>AWS Management Console</strong> by completing the following actions:</p>
+<ul>
+<li>
+<p>At the top of the screen, choose <strong>user-1</strong></p>
+</li>
+<li>
+<p>Choose <strong>Sign Out</strong></p>
+</li>
+</ul>
+</li>
+</ol>
+<p><img src="/images/000001/step-25.png?featherlight=false&amp;width=90pc" alt="Sign out"></p>
+<ol start="46">
+<li>
+<p>Paste the <strong>IAM users sign-in</strong> link into your private browser tab&rsquo;s address bar and press <strong>Enter</strong>.</p>
+</li>
+<li>
+<p>Sign-in with:</p>
+<ul>
+<li>
+<p><strong>IAM user name:</strong> <code>user-2</code></p>
+</li>
+<li>
+<p><strong>Password:</strong> Open file credential.csv which downloaded.</p>
+</li>
+</ul>
+</li>
+<li>
+<p>In the <strong>Services</strong> menu, choose <strong>EC2</strong>.</p>
+</li>
+<li>
+<p>In the navigation pane on the left, choose <strong>Instances</strong>.</p>
+<p>You are now able to see an Amazon EC2 instance because you have Read Only permissions. However, you will not be able to make any changes to Amazon EC2 resources.</p>
+<p>If you cannot see an Amazon EC2 instance, then your Region may be incorrect. In the top-right of the screen, pull-down the Region menu and select the region that you noted at the start of the lab (for example, <strong>N. Virginia</strong>).</p>
+</li>
+</ol>
+<p><img src="/images/000001/step-26.png?featherlight=false&amp;width=90pc" alt="user-2"></p>
+<ol start="50">
+<li>
+<p>Select the instance named <!-- raw HTML omitted --><!-- raw HTML omitted --> <em>Viet-AWS EC2</em>.
+In the <strong>Instance state</strong> menu above, select <strong>Stop instance</strong>.</p>
+</li>
+<li>
+<p>In the <strong>Stop Instance</strong> window, select <strong>Stop</strong>.</p>
+<p>You will receive an error stating <em>You are not authorized to perform this operation</em>. This demonstrates that the policy only allows you to view information, without making changes.</p>
+</li>
+</ol>
+<p><img src="/images/000001/step-27.png?featherlight=false&amp;width=90pc" alt="user-2"></p>
+<ol start="52">
+<li>
+<p>Choose the X to close the <em>Failed to stop the instance</em> message.</p>
+<p>Next, check if user-2 can access Amazon S3.</p>
+</li>
+<li>
+<p>In the <strong>Services</strong>, choose <strong>S3</strong>.</p>
+<p>You don&rsquo;t see any buckets although you pre-created because user-2 does not have permission to access Amazon S3.</p>
+<p>You will now sign-in as <strong>user-3</strong>, who has been hired as your Amazon EC2 administrator.</p>
+</li>
+</ol>
+<p><img src="/images/000001/step-28.png?featherlight=false&amp;width=90pc" alt="user-2"></p>
+<ol start="54">
+<li>
+<p>Sign user-2 out of the <strong>AWS Management Console</strong> by completing the following actions:</p>
+<ul>
+<li>
+<p>At the top of the screen, choose <strong>user-2</strong></p>
+</li>
+<li>
+<p>Choose <strong>Sign Out</strong></p>
+</li>
+</ul>
+</li>
+<li>
+<p>Paste the <strong>IAM users sign-in</strong> link into your private window and press <strong>Enter</strong>.</p>
+</li>
+<li>
+<p>Sign-in with:</p>
+<ul>
+<li>
+<p><strong>IAM user name:</strong> <code>user-3</code></p>
+</li>
+<li>
+<p><strong>Password:</strong> Open file credential.csv which downloaded.</p>
+</li>
+</ul>
+</li>
+<li>
+<p>In the <strong>Services</strong> menu, choose <strong>EC2</strong>.</p>
+</li>
+<li>
+<p>In the navigation pane on the left, choose <strong>Instances</strong>.</p>
+<p>As an EC2 Administrator, you should now have permissions to Stop the Amazon EC2 instance.</p>
+<p>Select the instance named <!-- raw HTML omitted --><!-- raw HTML omitted --> <em>Viet-AWS EC2</em> .</p>
+<p>If you cannot see an Amazon EC2 instance, then your Region may be incorrect. In the top-right of the screen, pull-down the Region menu and select the region that you noted at the start of the lab (for example, <strong>N. Virginia</strong>).</p>
+</li>
+</ol>
+<p><img src="/images/000001/step-29.png?featherlight=false&amp;width=90pc" alt="user-2"></p>
+<ol start="59">
+<li>
+<p>In the <strong>Instance state</strong> menu, choose <strong>Stop instance</strong>.</p>
+</li>
+<li>
+<p>In the <strong>Stop instance</strong> window, choose <strong>Stop</strong>.</p>
+<p>The instance will enter the <em>stopping</em> state and will shutdown.</p>
+</li>
+</ol>
+<p><img src="/images/000001/step-30.png?featherlight=false&amp;width=90pc" alt="user-2"></p>
+<p><img src="/images/000001/step-31.png?featherlight=false&amp;width=90pc" alt="user-2"></p>
+<ol start="61">
+<li>
+<p>In the <strong>Services</strong> menu, choose <strong>S3</strong>.</p>
+</li>
+<li>
+<p>You don&rsquo;t see any buckets although you pre-created because user-2 does not have permission to access Amazon S3.</p>
+</li>
+</ol>
+<p><img src="/images/000001/step-32.png?featherlight=false&amp;width=90pc" alt="user-1"></p>
+<ol start="63">
+<li>Close your private browser window.</li>
+</ol>
+<h2 id="lab-complete-i-classfas-fa-graduation-capi">Lab complete <!-- raw HTML omitted --><!-- raw HTML omitted --></h2>
+<p>Congratulations! You have completed the lab.</p>
+<h2 id="summary">Summary</h2>
+<p>Congratulations! You now have successfully:</p>
+<ul>
+<li>Exploring <strong>IAM Users and Groups</strong></li>
+<li>Inspecting <strong>IAM policies</strong> and attach to the created groups</li>
+<li>Following a <strong>real-world scenario</strong>, adding users to groups with specific capabilities enabled</li>
+<li>Locating and using the <strong>IAM sign-in URL</strong></li>
+<li><strong>Experimenting</strong> with the effects of policies on service access</li>
+</ul>
+
+
+
+
+
+<footer class=" footline" >
+	
+</footer>
+
+        
+        </div> 
+        
+
+      </div>
+
+    <div id="navigation">
+        
+        
+        
+        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+            
+        
+                    
+            
+        
+        
+        
+
+
+	 
+	 
+		
+			<a class="nav nav-prev" href="/1-category/1.1-securityidentitycompliance/" title="Security, Identity &amp; Compliance"> <i class="fa fa-chevron-left"></i></a>
+		
+		
+			<a class="nav nav-next" href="/2-level/" title="Filter by Level" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+		
+	
+    </div>
+
+    </section>
+    
+    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
+      <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
+    </div>
+    <script src="/js/clipboard.min.js?1673808581"></script>
+    <script src="/js/perfect-scrollbar.min.js?1673808581"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1673808581"></script>
+    <script src="/js/jquery.sticky.js?1673808581"></script>
+    <script src="/js/featherlight.min.js?1673808581"></script>
+    <script src="/js/highlight.pack.js?1673808581"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="/js/modernizr.custom-3.6.0.js?1673808581"></script>
+    <script src="/js/learn.js?1673808581"></script>
+    <script src="/js/hugo-learn.js?1673808581"></script>
+
+    <link href="/mermaid/mermaid.css?1673808581" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1673808581"></script>
+    <script>
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-158079754-2', 'auto');
+  ga('send', 'pageview');
+
+</script>
+  </body>
+</html>
